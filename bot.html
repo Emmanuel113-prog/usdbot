@@ -3,169 +3,229 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>NUCH BOT — Matches / Differs (Most Frequent Digit)</title>
+  <title>NUCH BOT — Matches (Most Frequent Digit)</title>
   <style>
     :root{
       --bg:#070812; --card:#0f1420; --muted:#9aa3b2; --accent:#00e0ff;
-      --green:#28a745; --red:#dc3545; --glass: rgba(255,255,255,0.03);
-      --panel-radius:12px;
+      --green:#28a745; --red:#dc3545; --yellow:#ffc107; --purple:#7e5cff;
+      --glass: rgba(255,255,255,0.03);
+      --panel-radius:16px; --element-radius:12px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#02030a 0%, #071022 100%);color:#e6eef6}
-    .container{max-width:1100px;margin:20px auto;padding:18px;display:grid;grid-template-columns:360px 1fr;gap:18px}
-    .panel{background:linear-gradient(180deg,var(--card),#0b1320);border-radius:var(--panel-radius);padding:16px;box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
-    h1{margin:0;font-size:18px;color:var(--accent);font-weight:800}
-    .subtitle{color:var(--muted);font-size:13px;margin-bottom:10px}
-    label{display:block;font-size:13px;color:var(--muted);margin-top:10px}
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#02030a 0%, #071022 50%, #0a1528 100%);color:#e6eef6; overflow-x:hidden;}
+    .container{max-width:1200px;margin:0 auto;padding:20px;display:grid;grid-template-columns:400px 1fr;gap:20px;min-height:100vh;}
+    .panel{background:linear-gradient(165deg,var(--card) 0%, #0b1320 100%);border-radius:var(--panel-radius);padding:24px;box-shadow:0 12px 40px rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(10px);}
+    .panel-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    h1{margin:0;font-size:22px;color:var(--accent);font-weight:800;background:linear-gradient(90deg, var(--accent), #00b8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .subtitle{color:var(--muted);font-size:14px;margin-top:6px;font-weight:500;}
+    label{display:block;font-size:14px;color:var(--muted);margin-top:16px;font-weight:600;}
     input[type="text"], input[type="password"], input[type="number"], select {
-      width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:#08101a;color:#e6eef6;font-size:14px;
-    }
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .btn{width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;font-weight:800}
-    .btn-start{background:linear-gradient(90deg,var(--green),#1fa84a);color:#04220f}
-    .btn-stop{background:linear-gradient(90deg,#dc3545,#b72828);color:#fff}
-    .stat-big{font-size:20px;font-weight:900;color:var(--accent)}
-    .small{font-size:12px;color:var(--muted)}
-    #circle{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:#fff;background:linear-gradient(180deg,#111827,#08101b);margin:auto}
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:8px 8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center}
-    th{color:var(--muted);font-weight:700;font-size:12px}
-    .log-wrap{height:300px;overflow:auto;padding-top:6px}
-    .controls-row{display:flex;gap:8px}
-    .switch {display:flex;align-items:center;gap:8px}
-    .banner-wrap{overflow:hidden;padding:10px 0;background:transparent}
+      width:100%;padding:14px;border-radius:var(--element-radius);border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,#08101a 0%, #060d15 100%);color:#e6eef6;font-size:14px;margin-top:6px;transition:all 0.3s ease;}
+    input:focus, select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,224,255,0.2);outline:none;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+    .btn{width:100%;padding:16px;border-radius:var(--element-radius);border:none;cursor:pointer;font-weight:800;font-size:15px;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:0.5px;}
+    .btn-start{background:linear-gradient(135deg,var(--green),#1fa84a);color:white;box-shadow:0 4px 15px rgba(40,167,69,0.3);}
+    .btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(40,167,69,0.4);}
+    .btn-stop{background:linear-gradient(135deg,var(--red),#b72828);color:white;box-shadow:0 4px 15px rgba(220,53,69,0.3);}
+    .btn-stop:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(220,53,69,0.4);}
+    .stat-big{font-size:28px;font-weight:900;background:linear-gradient(90deg, var(--accent), #00b8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .small{font-size:12px;color:var(--muted);}
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+    .stat-card{background:rgba(255,255,255,0.03);padding:12px;border-radius:var(--element-radius);text-align:center;}
+    .stat-value{font-size:18px;font-weight:800;color:var(--accent);}
+    .stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+    #circle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;font-weight:900;color:#fff;background:linear-gradient(135deg,#111827 0%, #08101b 100%);margin:auto;border:3px solid rgba(0,224,255,0.2);box-shadow:0 8px 25px rgba(0,0,0,0.6);}
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;}
+    th{color:var(--muted);font-weight:700;font-size:12px;background:rgba(255,255,255,0.02);}
+    tr:hover{background:rgba(255,255,255,0.02);}
+    .log-wrap{height:320px;overflow:auto;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);}
+    .win{color:var(--green);font-weight:800;}
+    .loss{color:var(--red);font-weight:800;}
+    .banner-wrap{overflow:hidden;padding:16px 0;background:linear-gradient(90deg, rgba(255,0,90,0.1), rgba(255,122,0,0.1), rgba(255,212,0,0.1), rgba(44,255,110,0.1), rgba(0,209,255,0.1), rgba(122,92,255,0.1));}
     .banner {
       display:inline-block;
       white-space:nowrap;
       padding-left:100%;
       font-weight:800;
-      font-size:18px;
-      animation: moveLeft 12s linear infinite, colorShift 4s linear infinite;
+      font-size:20px;
+      animation: moveLeft 15s linear infinite, colorShift 5s linear infinite;
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background:linear-gradient(90deg, #ff005a, #ff7a00, #ffd400, #2cff6e, #00d1ff, #7a5cff);
       background-size:400% 400%;
     }
     @keyframes moveLeft { 0% { transform: translateX(0%);} 100% { transform: translateX(-100%);} }
     @keyframes colorShift { 0% { background-position:0% 50% } 50% { background-position:100% 50% } 100% { background-position:0% 50% } }
-    @media(max-width:980px){.container{grid-template-columns:1fr; padding:12px} #circle{width:120px;height:120px;font-size:44px}}
+    .freq-bar-container{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
+    .freq-bar{padding:10px;border-radius:var(--element-radius);text-align:center;transition:all 0.3s ease;}
+    .freq-bar.highlight{background:linear-gradient(135deg, var(--yellow), var(--purple));color:#000;font-weight:800;transform:scale(1.05);box-shadow:0 4px 15px rgba(255,213,77,0.4);}
+    .control-group{background:rgba(255,255,255,0.02);padding:16px;border-radius:var(--element-radius);margin:16px 0;}
+    .switch{display:flex;align-items:center;gap:10px;margin:8px 0;}
+    .switch input[type="checkbox"]{width:18px;height:18px;}
+    #miniLog{height:160px;overflow:auto;margin-top:12px;padding:16px;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);font-size:13px;line-height:1.4;}
+    .log-entry{margin-bottom:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);}
+    .log-time{color:var(--accent);font-weight:600;}
+    @media(max-width:980px){.container{grid-template-columns:1fr; padding:16px} #circle{width:140px;height:140px;font-size:50px;}}
   </style>
 </head>
 <body>
-  <div class="banner-wrap" style="text-align:center">
-    <div class="banner">By Nuch Contact 0769769295 for more information</div>
+  <div class="banner-wrap">
+    <div class="banner">⚡ NUCH BOT — MATCHES TRADING • Most Frequent Digit Strategy • Contact: 0769769295 ⚡</div>
   </div>
 
   <div class="container">
+    <!-- Left Panel - Controls -->
     <div class="panel">
-      <h1>NUCH BOT — MATCHES / DIFFERS</h1>
-      <div class="subtitle">Most-appearing digit strategy (auto-select barrier)</div>
-
-      <label>Total Profit</label>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="stat-big" id="totalProfit">$0.00</div>
-        <div class="small" id="sessionInfo">Trades: 0 • Loss Streak: 0</div>
+      <div class="panel-header">
+        <h1>🎯 MATCHES TRADING BOT</h1>
+        <div class="subtitle">Automated trading using most frequent digit analysis</div>
       </div>
 
-      <label>Deriv API Token</label>
-      <input id="token" type="password" placeholder="Your API token" />
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalProfit">$0.00</div>
+          <div class="stat-label">TOTAL PROFIT</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="tradeCount">0</div>
+          <div class="stat-label">TRADES</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="lossStreak">0</div>
+          <div class="stat-label">LOSS STREAK</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="winRate">0%</div>
+          <div class="stat-label">WIN RATE</div>
+        </div>
+      </div>
+
+      <label>🔑 Deriv API Token</label>
+      <input id="token" type="password" placeholder="Enter your Deriv API token" />
 
       <div class="grid2">
         <div>
-          <label>Market (symbol)</label>
+          <label>📈 Market Symbol</label>
           <input id="market" type="text" value="1HZ100V" />
         </div>
         <div>
-          <label>Tick window (M)</label>
-          <input id="window" type="number" min="3" max="200" value="30" />
-          <div class="small">Number of last ticks used to compute most frequent digit</div>
+          <label>🔍 Analysis Window</label>
+          <input id="window" type="number" min="10" max="100" value="30" />
+          <div class="small">Ticks analyzed for frequency</div>
         </div>
       </div>
 
-      <label>Contract Type</label>
+      <label>🎯 Contract Type</label>
       <select id="contractType">
-        <option value="DIGITMATCH">Matches (DIGITMATCH)</option>
-        <option value="DIGITDIFF">Differs (DIGITDIFF)</option>
+        <option value="DIGITMATCH" selected>✅ Matches (DIGITMATCH)</option>
+        <option value="DIGITDIFF">❌ Differs (DIGITDIFF)</option>
       </select>
 
       <div class="grid2">
         <div>
-          <label>Base Stake ($)</label>
-          <input id="stake" type="number" min="0.01" step="0.01" value="0.35" />
+          <label>💰 Base Stake ($)</label>
+          <input id="stake" type="number" min="0.35" step="0.01" value="0.35" />
         </div>
         <div>
-          <label>Current Stake (read-only)</label>
+          <label>📊 Current Stake</label>
           <input id="currentStake" type="text" readonly value="$0.35" />
         </div>
       </div>
 
-      <label>Stop options</label>
-      <div style="display:flex;gap:8px;flex-direction:column">
-        <div style="display:flex;gap:8px">
-          <label><input type="checkbox" id="stopOnProfit" /> Stop on profit ≥</label>
-          <input id="profitLimit" type="number" min="0.01" step="0.01" value="2" style="width:100px" />
+      <div class="control-group">
+        <label style="margin-top:0;">🛑 Stop Conditions</label>
+        <div class="switch">
+          <input type="checkbox" id="stopOnProfit" />
+          <label style="margin:0">Take profit at: $</label>
+          <input id="profitLimit" type="number" min="0.01" step="0.01" value="2.00" style="width:80px" />
         </div>
-        <div style="display:flex;gap:8px">
-          <label><input type="checkbox" id="stopOnLoss" /> Stop on loss ≤</label>
-          <input id="lossLimit" type="number" min="0.01" step="0.01" value="5" style="width:100px" />
+        <div class="switch">
+          <input type="checkbox" id="stopOnLoss" />
+          <label style="margin:0">Stop loss at: -$</label>
+          <input id="lossLimit" type="number" min="0.01" step="0.01" value="5.00" style="width:80px" />
         </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <label style="margin:0"><input type="checkbox" id="stopOnSingleLoss" /> Stop after a single losing trade</label>
+        <div class="switch">
+          <input type="checkbox" id="stopOnSingleLoss" />
+          <label style="margin:0">Stop after single loss</label>
         </div>
       </div>
 
-      <label>Alerts</label>
-      <div style="display:flex;gap:8px;align-items:center">
-        <label style="margin:0"><input type="checkbox" id="voiceAlert" /> Voice alert on win/loss</label>
+      <div class="switch">
+        <input type="checkbox" id="voiceAlert" />
+        <label style="margin:0">🔊 Voice alerts on win/loss</label>
       </div>
 
-      <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn btn-start" id="startBtn">Start</button>
-        <button class="btn btn-stop" id="stopBtn">Stop</button>
+      <div style="display:flex;gap:12px;margin-top:20px;">
+        <button class="btn btn-start" id="startBtn">🚀 START BOT</button>
+        <button class="btn btn-stop" id="stopBtn">🛑 STOP BOT</button>
       </div>
 
-      <div style="margin-top:12px" class="small">Mini log</div>
-      <div id="miniLog" style="height:140px;overflow:auto;margin-top:8px;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);font-size:13px"></div>
+      <label style="margin-top:20px;">📝 Activity Log</label>
+      <div id="miniLog"></div>
     </div>
 
-    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-        <div style="font-weight:800">Live Visual</div>
-        <div style="font-size:13px;color:var(--muted)">Symbol: <span id="liveSymbol">1HZ100V</span></div>
+    <!-- Right Panel - Live Data -->
+    <div class="panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div style="font-weight:800;font-size:18px;">📊 LIVE TRADING VIEW</div>
+        <div style="font-size:14px;color:var(--muted)">Symbol: <span id="liveSymbol">1HZ100V</span></div>
       </div>
 
-      <div style="display:flex;gap:18px;align-items:center">
-        <div style="flex:0 0 180px;text-align:center">
-          <div id="circle"><div id="circleDigit">-</div></div>
-          <div id="predictionLabel" style="margin-top:8px;text-align:center">Barrier: <strong id="barrierText">—</strong></div>
+      <div style="display:flex;gap:24px;align-items:center;margin-bottom:24px;">
+        <div style="flex:0 0 auto;text-align:center">
+          <div id="circle">
+            <div id="circleDigit">-</div>
+          </div>
+          <div style="margin-top:12px;font-size:14px;color:var(--muted)">
+            Current Digit: <strong id="currentDigit">—</strong>
+          </div>
+          <div style="margin-top:8px;font-size:16px;font-weight:800;color:var(--accent)">
+            Barrier: <strong id="barrierText">—</strong>
+          </div>
         </div>
 
         <div style="flex:1">
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div class="small">Trades: <strong id="tradeCount">0</strong></div>
-            <div class="small">Loss Streak: <strong id="lossStreak">0</strong></div>
-            <div class="small">Waiting: <strong id="waitingFlag">No</strong></div>
-            <div class="small">Window size: <strong id="windowSize">30</strong></div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+            <div class="stat-card">
+              <div class="stat-value" id="waitingFlag">No</div>
+              <div class="stat-label">WAITING</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="windowSize">30</div>
+              <div class="stat-label">WINDOW</div>
+            </div>
           </div>
 
-          <div style="margin-top:12px">
-            <div style="font-weight:800;margin-bottom:6px">Digit frequencies (latest window)</div>
-            <div id="freqBars" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:13px"></div>
+          <div>
+            <div style="font-weight:800;margin-bottom:12px;color:var(--accent)">Digit Frequency Analysis</div>
+            <div id="freqBars" class="freq-bar-container"></div>
           </div>
         </div>
       </div>
 
-      <div style="font-weight:800;margin-top:6px">Trade Log</div>
+      <div style="font-weight:800;margin-bottom:12px;font-size:16px;">📈 TRADE HISTORY</div>
       <div class="log-wrap">
         <table id="logTable">
           <thead>
-            <tr><th>#</th><th class="small">Time</th><th>Barrier</th><th>Prediction</th><th>Stake</th><th>Result</th><th>P/L</th></tr>
+            <tr>
+              <th>#</th>
+              <th>TIME</th>
+              <th>BARRIER</th>
+              <th>TYPE</th>
+              <th>STAKE</th>
+              <th>RESULT</th>
+              <th>P/L</th>
+            </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
 
-      <div style="margin-top:6px;font-size:12px;color:var(--muted)">
-        Notes: Bot picks the most frequent digit from the last M ticks as the barrier. You can choose Matches or Differs contract. Configure stop-on-profit/loss and voice alerts.
+      <div style="margin-top:16px;padding:12px;background:rgba(0,224,255,0.05);border-radius:var(--element-radius);border-left:4px solid var(--accent);">
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">
+          <strong>Strategy:</strong> Analyzes last 30 ticks, finds most frequent digit (0-9), places MATCHES contract on that digit. 
+          Martingale: doubles stake after losses, resets after wins.
+        </div>
       </div>
     </div>
   </div>
@@ -181,6 +241,7 @@
       currentStake: 0.35,
       baseStake: 0.35,
       tradeCount: 0,
+      winCount: 0,
       lossStreak: 0,
       totalProfit: 0,
       waitingResult: false,
@@ -188,233 +249,263 @@
       lastBarrier: null
     };
 
-    const miniLog = document.getElementById('miniLog');
-    const totalProfitEl = document.getElementById('totalProfit');
-    const sessionInfoEl = document.getElementById('sessionInfo');
-    const circleDigitEl = document.getElementById('circleDigit');
-    const barrierText = document.getElementById('barrierText');
-    const tradeCountEl = document.getElementById('tradeCount');
-    const lossStreakEl = document.getElementById('lossStreak');
-    const waitingFlagEl = document.getElementById('waitingFlag');
-    const freqBars = document.getElementById('freqBars');
-    const windowSizeEl = document.getElementById('windowSize');
-    const logTableBody = document.querySelector('#logTable tbody');
+    // DOM Elements
+    const elements = {
+      miniLog: document.getElementById('miniLog'),
+      totalProfit: document.getElementById('totalProfit'),
+      tradeCount: document.getElementById('tradeCount'),
+      lossStreak: document.getElementById('lossStreak'),
+      winRate: document.getElementById('winRate'),
+      circleDigit: document.getElementById('circleDigit'),
+      currentDigit: document.getElementById('currentDigit'),
+      barrierText: document.getElementById('barrierText'),
+      waitingFlag: document.getElementById('waitingFlag'),
+      freqBars: document.getElementById('freqBars'),
+      windowSize: document.getElementById('windowSize'),
+      logTableBody: document.querySelector('#logTable tbody'),
+      liveSymbol: document.getElementById('liveSymbol')
+    };
 
-    function addMini(msg){ 
-      const t = new Date().toLocaleTimeString(); 
-      miniLog.innerHTML = `<div style="margin-bottom:6px"><strong>[${t}]</strong> ${msg}</div>` + miniLog.innerHTML;
+    function addMini(msg, type = 'info') {
+      const t = new Date().toLocaleTimeString();
+      const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#2cff6e' : '#00d1ff';
+      elements.miniLog.innerHTML = `
+        <div class="log-entry" style="border-left: 3px solid ${color}">
+          <span class="log-time">[${t}]</span> ${msg}
+        </div>
+      ` + elements.miniLog.innerHTML;
     }
 
-    function addLogRow(entry){ 
-      state.tradeCount += 1; 
-      const tr = document.createElement('tr'); 
-      tr.innerHTML = `<td>${state.tradeCount}</td><td class="small">${entry.time}</td><td>${entry.barrier}</td><td>${entry.prediction}</td><td>$${entry.stake.toFixed(2)}</td><td>${entry.result}</td><td>$${entry.profit.toFixed(2)}</td>`; 
-      logTableBody.prepend(tr);
+    function addLogRow(entry) {
+      state.tradeCount += 1;
+      if (entry.result === 'WIN') state.winCount += 1;
+      
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${state.tradeCount}</td>
+        <td class="small">${entry.time}</td>
+        <td><strong>${entry.barrier}</strong></td>
+        <td>${entry.prediction}</td>
+        <td>$${entry.stake.toFixed(2)}</td>
+        <td class="${entry.result === 'WIN' ? 'win' : 'loss'}">${entry.result}</td>
+        <td class="${entry.profit >= 0 ? 'win' : 'loss'}">$${entry.profit.toFixed(2)}</td>
+      `;
+      elements.logTableBody.prepend(tr);
     }
 
-    function updateUI(){ 
-      totalProfitEl.textContent = `$${state.totalProfit.toFixed(2)}`; 
-      sessionInfoEl.textContent = `Trades: ${state.tradeCount} • Loss Streak: ${state.lossStreak}`; 
-      tradeCountEl.textContent = `${state.tradeCount}`; 
-      lossStreakEl.textContent = `${state.lossStreak}`; 
-      waitingFlagEl.textContent = state.waitingResult ? 'Yes' : 'No'; 
-      document.getElementById('currentStake').value = `$${state.currentStake.toFixed(2)}`; 
-      document.getElementById('liveSymbol').textContent = state.market; 
-      windowSizeEl.textContent = state.window;
+    function updateUI() {
+      elements.totalProfit.textContent = `$${state.totalProfit.toFixed(2)}`;
+      elements.tradeCount.textContent = state.tradeCount;
+      elements.lossStreak.textContent = state.lossStreak;
+      elements.winRate.textContent = state.tradeCount > 0 ? `${Math.round((state.winCount / state.tradeCount) * 100)}%` : '0%';
+      elements.waitingFlag.textContent = state.waitingResult ? 'Yes' : 'No';
+      elements.waitingFlag.style.color = state.waitingResult ? '#ff6b6b' : '#2cff6e';
+      document.getElementById('currentStake').value = `$${state.currentStake.toFixed(2)}`;
+      elements.liveSymbol.textContent = state.market;
+      elements.windowSize.textContent = state.window;
     }
 
-    function speak(text){
-      if(!('speechSynthesis' in window)) return;
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'en-US';
+      utter.rate = 1.0;
       window.speechSynthesis.speak(utter);
     }
 
-    function computeFrequencies(){ 
-      const freq = new Array(10).fill(0); 
-      state.ticks.forEach(d => { 
-        if(typeof d === 'number') freq[d]++; 
-      }); 
+    function computeFrequencies() {
+      const freq = new Array(10).fill(0);
+      state.ticks.forEach(d => {
+        if (typeof d === 'number') freq[d]++;
+      });
       return freq;
     }
 
-    function mostFrequentDigit(){ 
-      const freq = computeFrequencies(); 
-      let best = 0, bestDigit = null; 
-      for(let i = 0; i < freq.length; i++){ 
-        if(freq[i] > best){ 
-          best = freq[i]; 
-          bestDigit = i; 
-        } 
-      } 
-      return {digit: bestDigit, freq};
+    function mostFrequentDigit() {
+      const freq = computeFrequencies();
+      let best = 0, bestDigit = null;
+      for (let i = 0; i < freq.length; i++) {
+        if (freq[i] > best) {
+          best = freq[i];
+          bestDigit = i;
+        }
+      }
+      return { digit: bestDigit, freq };
     }
 
-    function renderFreqBars(){ 
-      const {digit, freq} = mostFrequentDigit(); 
-      freqBars.innerHTML = ''; 
-      const maxVal = Math.max(...freq, 1); 
-      for(let i = 0; i < 10; i++){ 
-        const pct = Math.round((freq[i] / maxVal) * 100); 
-        const el = document.createElement('div'); 
-        el.style.padding = '6px'; 
-        el.style.borderRadius = '8px'; 
-        el.style.background = i === digit ? 'linear-gradient(90deg,#ffd54d,#ff6b6b)' : 'rgba(255,255,255,0.02)'; 
-        el.innerHTML = `<div style="font-weight:800">${i}</div><div style="font-size:11px;color:var(--muted)">${freq[i]}</div>`; 
-        freqBars.appendChild(el); 
+    function renderFreqBars() {
+      const { digit, freq } = mostFrequentDigit();
+      elements.freqBars.innerHTML = '';
+      const maxVal = Math.max(...freq, 1);
+      
+      for (let i = 0; i < 10; i++) {
+        const el = document.createElement('div');
+        el.className = `freq-bar ${i === digit ? 'highlight' : ''}`;
+        el.innerHTML = `
+          <div style="font-weight:800; font-size:16px;">${i}</div>
+          <div style="font-size:11px; margin-top:4px;">${freq[i]}</div>
+        `;
+        elements.freqBars.appendChild(el);
       }
     }
 
-    function startBot(){
+    function startBot() {
       state.token = document.getElementById('token').value.trim();
-      state.market = (document.getElementById('market').value || '1HZ100V').trim();
+      state.market = (document.getElementById('market').value || '1HZ100V').trim().toUpperCase();
       state.window = parseInt(document.getElementById('window').value) || 30;
       state.baseStake = parseFloat(document.getElementById('stake').value) || 0.35;
       state.currentStake = state.baseStake;
-      state.ticks = []; 
-      state.isRunning = true; 
-      state.tradeCount = 0; 
-      state.lossStreak = 0; 
-      state.totalProfit = 0; 
-      state.waitingResult = false; 
+      state.ticks = [];
+      state.isRunning = true;
+      state.tradeCount = 0;
+      state.winCount = 0;
+      state.lossStreak = 0;
+      state.totalProfit = 0;
+      state.waitingResult = false;
       state.lastBarrier = null;
-      logTableBody.innerHTML = '';
       
-      if(!state.token){
-        alert('Enter valid API token'); 
+      elements.logTableBody.innerHTML = '';
+      elements.miniLog.innerHTML = '';
+      
+      if (!state.token) {
+        addMini('❌ Please enter a valid API token', 'error');
         return;
       }
       
-      addMini('Starting Matches/Differs bot...');
-      connectWebsocket(); 
+      addMini('🚀 Starting Matches Trading Bot...', 'success');
+      connectWebsocket();
       updateUI();
     }
 
-    function stopBot(){ 
-      state.isRunning = false; 
-      if(ws){
-        try{
+    function stopBot() {
+      state.isRunning = false;
+      if (ws) {
+        try {
           ws.close();
-        }catch(e){}
-      } 
-      addMini('Bot stopped.'); 
-      updateUI(); 
+        } catch (e) {}
+      }
+      addMini('🛑 Bot stopped manually', 'error');
+      updateUI();
     }
 
-    function connectWebsocket(){
+    function connectWebsocket() {
       ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');
       
-      ws.onopen = () => { 
-        addMini('[WS] Connected'); 
-        ws.send(JSON.stringify({authorize: state.token})); 
+      ws.onopen = () => {
+        addMini('🔗 WebSocket connected, authorizing...', 'success');
+        ws.send(JSON.stringify({ authorize: state.token }));
       };
       
-      ws.onerror = (e) => { 
-        addMini('[WS] Error'); 
-        console.error(e); 
+      ws.onerror = (e) => {
+        addMini('❌ WebSocket error occurred', 'error');
+        console.error('WebSocket error:', e);
       };
       
-      ws.onclose = (ev) => { 
-        addMini('[WS] Closed'); 
-        state.waitingResult = false; 
-        updateUI(); 
-        if(state.isRunning){ 
-          setTimeout(() => { 
-            addMini('[WS] Reconnecting...'); 
-            connectWebsocket(); 
-          }, 3000); 
-        } 
+      ws.onclose = (ev) => {
+        addMini('🔌 WebSocket connection closed', 'error');
+        state.waitingResult = false;
+        updateUI();
+        if (state.isRunning) {
+          setTimeout(() => {
+            addMini('🔄 Attempting to reconnect...', 'info');
+            connectWebsocket();
+          }, 3000);
+        }
       };
       
-      ws.onmessage = (msg) => { 
-        try{ 
-          const data = JSON.parse(msg.data); 
-          if(data.error){ 
-            addMini('[ERROR] ' + (data.error.message || JSON.stringify(data.error))); 
-            if(data.error && data.error.code === 'AuthorizationRequired') stopBot(); 
+      ws.onmessage = (msg) => {
+        try {
+          const data = JSON.parse(msg.data);
+          if (data.error) {
+            addMini(`❌ Error: ${data.error.message || JSON.stringify(data.error)}`, 'error');
+            if (data.error && data.error.code === 'AuthorizationRequired') stopBot();
             return;
-          } 
+          }
           handleWsMessage(data);
-        }catch(err){
-          console.error('parse error', err);
-        } 
+        } catch (err) {
+          console.error('Parse error:', err);
+        }
       };
     }
 
-    function handleWsMessage(data){
-      if(data.msg_type === 'authorize'){ 
-        addMini('[BOT] Authorized. Subscribing ticks: ' + state.market); 
-        ws.send(JSON.stringify({ticks: state.market, subscribe: 1})); 
-        return; 
+    function handleWsMessage(data) {
+      if (data.msg_type === 'authorize') {
+        addMini('✅ Authorization successful, subscribing to ticks...', 'success');
+        ws.send(JSON.stringify({ ticks: state.market, subscribe: 1 }));
+        return;
       }
       
-      if(data.msg_type === 'tick'){ 
-        const quote = data.tick && data.tick.quote; 
-        if(quote === undefined) return; 
-        const digit = parseInt(String(quote).slice(-1)); 
-        onNewTick(digit); 
-        return; 
+      if (data.msg_type === 'tick') {
+        const quote = data.tick && data.tick.quote;
+        if (quote === undefined) return;
+        const digit = parseInt(String(quote).slice(-1));
+        onNewTick(digit);
+        return;
       }
       
-      if(data.msg_type === 'buy'){ 
-        if(data.buy && data.buy.contract_id){ 
-          state.contractId = data.buy.contract_id; 
-          addMini(`[TRADE] Bought contract ${state.contractId}`); 
+      if (data.msg_type === 'buy') {
+        if (data.buy && data.buy.contract_id) {
+          state.contractId = data.buy.contract_id;
+          addMini(`📊 Trade placed - Contract ID: ${state.contractId}`, 'success');
           ws.send(JSON.stringify({
             proposal_open_contract: 1,
             contract_id: state.contractId,
             subscribe: 1
-          })); 
-        } else{ 
-          addMini('[ERROR] Buy failed'); 
-          state.waitingResult = false; 
+          }));
+        } else {
+          addMini('❌ Trade placement failed', 'error');
+          state.waitingResult = false;
           updateUI();
-        } 
-        return; 
+        }
+        return;
       }
       
-      if(data.msg_type === 'proposal_open_contract'){ 
-        const open = data.proposal_open_contract; 
-        if(!open) return; 
-        if(open.is_sold){ 
-          const profit = parseFloat(open.profit) || 0; 
-          let entryBarrier = state.lastBarrier; 
-          try{ 
-            if((!entryBarrier || entryBarrier === null) && open.entry_tick) 
-              entryBarrier = parseInt(String(open.entry_tick).slice(-1)); 
-          }catch(e){} 
+      if (data.msg_type === 'proposal_open_contract') {
+        const open = data.proposal_open_contract;
+        if (!open) return;
+        if (open.is_sold) {
+          const profit = parseFloat(open.profit) || 0;
+          let entryBarrier = state.lastBarrier;
+          try {
+            if ((!entryBarrier || entryBarrier === null) && open.entry_tick) {
+              entryBarrier = parseInt(String(open.entry_tick).slice(-1));
+            }
+          } catch (e) {}
           handleContractResult(profit, entryBarrier);
         }
-        return; 
+        return;
       }
     }
 
-    function onNewTick(digit){
-      if(!state.isRunning) return;
+    function onNewTick(digit) {
+      if (!state.isRunning) return;
       
       // Add new digit to ticks array
       state.ticks.push(digit);
       
       // Keep only the last 'window' ticks
-      if(state.ticks.length > state.window){
+      if (state.ticks.length > state.window) {
         state.ticks = state.ticks.slice(-state.window);
       }
       
-      // Update circle display
-      circleDigitEl.textContent = digit;
+      // Update displays
+      elements.circleDigit.textContent = digit;
+      elements.currentDigit.textContent = digit;
       
       // Render frequency bars
       renderFreqBars();
       
       // If not waiting for result and have enough data, place trade
-      if(!state.waitingResult && state.ticks.length >= state.window){
+      if (!state.waitingResult && state.ticks.length >= state.window) {
         placeTrade();
       }
+      
+      updateUI();
     }
 
-    function placeTrade(){
-      const {digit} = mostFrequentDigit();
-      if(digit === null) return;
+    function placeTrade() {
+      const { digit } = mostFrequentDigit();
+      if (digit === null) return;
       
       state.lastBarrier = digit;
       state.waitingResult = true;
@@ -422,10 +513,10 @@
       const contractType = document.getElementById('contractType').value;
       const prediction = contractType === 'DIGITMATCH' ? 'Matches' : 'Differs';
       
-      addMini(`[TRADE] Placing ${prediction} trade with barrier ${digit}, stake $${state.currentStake.toFixed(2)}`);
+      addMini(`🎯 Placing ${prediction} trade - Barrier: ${digit}, Stake: $${state.currentStake.toFixed(2)}`, 'info');
       
       // Update barrier display
-      barrierText.textContent = digit;
+      elements.barrierText.textContent = digit;
       
       // Send buy request
       ws.send(JSON.stringify({
@@ -446,7 +537,7 @@
       updateUI();
     }
 
-    function handleContractResult(profit, barrier){
+    function handleContractResult(profit, barrier) {
       state.waitingResult = false;
       
       const contractType = document.getElementById('contractType').value;
@@ -457,7 +548,7 @@
       // Update stats
       state.totalProfit += profit;
       
-      if(isWin){
+      if (isWin) {
         state.lossStreak = 0;
         state.currentStake = state.baseStake; // Reset to base stake after win
       } else {
@@ -480,38 +571,39 @@
       
       // Voice alert
       const voiceAlert = document.getElementById('voiceAlert').checked;
-      if(voiceAlert){
+      if (voiceAlert) {
         speak(isWin ? 'Trade won' : 'Trade lost');
       }
       
       // Check stop conditions
       checkStopConditions();
       
-      addMini(`[RESULT] ${result} - P/L: $${profit.toFixed(2)} - Total: $${state.totalProfit.toFixed(2)}`);
+      addMini(`📈 ${result} - P/L: $${profit.toFixed(2)} - Total: $${state.totalProfit.toFixed(2)}`, 
+             isWin ? 'success' : 'error');
       updateUI();
     }
 
-    function checkStopConditions(){
+    function checkStopConditions() {
       const stopOnProfit = document.getElementById('stopOnProfit').checked;
       const profitLimit = parseFloat(document.getElementById('profitLimit').value) || 0;
       const stopOnLoss = document.getElementById('stopOnLoss').checked;
       const lossLimit = parseFloat(document.getElementById('lossLimit').value) || 0;
       const stopOnSingleLoss = document.getElementById('stopOnSingleLoss').checked;
       
-      if(stopOnProfit && state.totalProfit >= profitLimit){
-        addMini(`[STOP] Profit target reached: $${state.totalProfit.toFixed(2)}`);
+      if (stopOnProfit && state.totalProfit >= profitLimit) {
+        addMini(`🎉 Profit target reached: $${state.totalProfit.toFixed(2)} - Stopping bot`, 'success');
         stopBot();
         return;
       }
       
-      if(stopOnLoss && state.totalProfit <= -lossLimit){
-        addMini(`[STOP] Loss limit reached: $${state.totalProfit.toFixed(2)}`);
+      if (stopOnLoss && state.totalProfit <= -lossLimit) {
+        addMini(`💸 Loss limit reached: $${Math.abs(state.totalProfit).toFixed(2)} - Stopping bot`, 'error');
         stopBot();
         return;
       }
       
-      if(stopOnSingleLoss && state.lossStreak >= 1){
-        addMini('[STOP] Single loss stop triggered');
+      if (stopOnSingleLoss && state.lossStreak >= 1) {
+        addMini('🛑 Single loss stop triggered', 'error');
         stopBot();
         return;
       }
@@ -524,6 +616,7 @@
     // Initialize UI
     updateUI();
     renderFreqBars();
+    addMini('💡 Ready to start trading! Enter your API token and click START.', 'info');
   </script>
 </body>
 </html>
