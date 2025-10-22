@@ -9,68 +9,68 @@
       --bg:#070812; --card:#0f1420; --muted:#9aa3b2; --accent:#00e0ff;
       --green:#28a745; --red:#dc3545; --yellow:#ffc107; --purple:#7e5cff;
       --glass: rgba(255,255,255,0.03);
-      --panel-radius:16px; --element-radius:12px;
+      --panel-radius:12px; --element-radius:8px;
     }
     *{box-sizing:border-box; margin:0; padding:0;}
     html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#02030a 0%, #071022 50%, #0a1528 100%);color:#e6eef6; overflow-x:hidden;}
-    .container{max-width:1200px;margin:0 auto;padding:20px;display:grid;grid-template-columns:400px 1fr;gap:20px;min-height:100vh;}
-    .panel{background:linear-gradient(165deg,var(--card) 0%, #0b1320 100%);border-radius:var(--panel-radius);padding:24px;box-shadow:0 12px 40px rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(10px);}
-    .panel-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.05);}
-    h1{margin:0;font-size:22px;color:var(--accent);font-weight:800;background:linear-gradient(90deg, var(--accent), #00b8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .subtitle{color:var(--muted);font-size:14px;margin-top:6px;font-weight:500;}
-    label{display:block;font-size:14px;color:var(--muted);margin-top:16px;font-weight:600;}
+    .container{max-width:100%;margin:0 auto;padding:10px;display:flex;flex-direction:column;gap:12px;}
+    .panel{background:linear-gradient(165deg,var(--card) 0%, #0b1320 100%);border-radius:var(--panel-radius);padding:16px;box-shadow:0 8px 25px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.05);}
+    .panel-header{margin-bottom:15px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
+    h1{margin:0;font-size:18px;color:var(--accent);font-weight:800;}
+    .subtitle{color:var(--muted);font-size:12px;margin-top:4px;}
+    label{display:block;font-size:13px;color:var(--muted);margin-top:12px;font-weight:600;}
     input[type="text"], input[type="password"], input[type="number"], select {
-      width:100%;padding:14px;border-radius:var(--element-radius);border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,#08101a 0%, #060d15 100%);color:#e6eef6;font-size:14px;margin-top:6px;transition:all 0.3s ease;}
+      width:100%;padding:12px;border-radius:var(--element-radius);border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg,#08101a 0%, #060d15 100%);color:#e6eef6;font-size:14px;margin-top:4px;}
     input:focus, select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,224,255,0.2);outline:none;}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
-    .btn{width:100%;padding:16px;border-radius:var(--element-radius);border:none;cursor:pointer;font-weight:800;font-size:15px;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:0.5px;}
-    .btn-start{background:linear-gradient(135deg,var(--green),#1fa84a);color:white;box-shadow:0 4px 15px rgba(40,167,69,0.3);}
-    .btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(40,167,69,0.4);}
-    .btn-stop{background:linear-gradient(135deg,var(--red),#b72828);color:white;box-shadow:0 4px 15px rgba(220,53,69,0.3);}
-    .btn-stop:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(220,53,69,0.4);}
-    .stat-big{font-size:28px;font-weight:900;background:linear-gradient(90deg, var(--accent), #00b8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .small{font-size:12px;color:var(--muted);}
-    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
-    .stat-card{background:rgba(255,255,255,0.03);padding:12px;border-radius:var(--element-radius);text-align:center;}
-    .stat-value{font-size:18px;font-weight:800;color:var(--accent);}
-    .stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
-    #circle{width:160px;height:160px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;font-weight:900;color:#fff;background:linear-gradient(135deg,#111827 0%, #08101b 100%);margin:auto;border:3px solid rgba(0,224,255,0.2);box-shadow:0 8px 25px rgba(0,0,0,0.6);}
-    table{width:100%;border-collapse:collapse;font-size:13px;}
-    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;}
-    th{color:var(--muted);font-weight:700;font-size:12px;background:rgba(255,255,255,0.02);}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+    .btn{width:100%;padding:14px;border-radius:var(--element-radius);border:none;cursor:pointer;font-weight:800;font-size:14px;transition:all 0.3s ease;}
+    .btn-start{background:linear-gradient(135deg,var(--green),#1fa84a);color:white;}
+    .btn-stop{background:linear-gradient(135deg,var(--red),#b72828);color:white;}
+    .stat-big{font-size:22px;font-weight:900;color:var(--accent);}
+    .small{font-size:11px;color:var(--muted);}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;}
+    .stat-card{background:rgba(255,255,255,0.03);padding:10px;border-radius:var(--element-radius);text-align:center;}
+    .stat-value{font-size:16px;font-weight:800;color:var(--accent);}
+    .stat-label{font-size:10px;color:var(--muted);margin-top:2px;}
+    #circle{width:120px;height:120px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#fff;background:linear-gradient(135deg,#111827 0%, #08101b 100%);margin:auto;border:2px solid rgba(0,224,255,0.2);}
+    table{width:100%;border-collapse:collapse;font-size:12px;}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;}
+    th{color:var(--muted);font-weight:700;font-size:11px;background:rgba(255,255,255,0.02);}
     tr:hover{background:rgba(255,255,255,0.02);}
-    .log-wrap{height:320px;overflow:auto;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);}
+    .log-wrap{height:250px;overflow:auto;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);}
     .win{color:var(--green);font-weight:800;}
     .loss{color:var(--red);font-weight:800;}
-    .banner-wrap{overflow:hidden;padding:16px 0;background:linear-gradient(90deg, rgba(255,0,90,0.1), rgba(255,122,0,0.1), rgba(255,212,0,0.1), rgba(44,255,110,0.1), rgba(0,209,255,0.1), rgba(122,92,255,0.1));}
+    .banner-wrap{overflow:hidden;padding:12px 0;background:linear-gradient(90deg, rgba(255,0,90,0.1), rgba(255,122,0,0.1));}
     .banner {
       display:inline-block;
       white-space:nowrap;
       padding-left:100%;
       font-weight:800;
-      font-size:20px;
-      animation: moveLeft 15s linear infinite, colorShift 5s linear infinite;
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background:linear-gradient(90deg, #ff005a, #ff7a00, #ffd400, #2cff6e, #00d1ff, #7a5cff);
-      background-size:400% 400%;
+      font-size:16px;
+      animation: moveLeft 15s linear infinite;
+      color:var(--accent);
     }
     @keyframes moveLeft { 0% { transform: translateX(0%);} 100% { transform: translateX(-100%);} }
-    @keyframes colorShift { 0% { background-position:0% 50% } 50% { background-position:100% 50% } 100% { background-position:0% 50% } }
-    .freq-bar-container{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
-    .freq-bar{padding:10px;border-radius:var(--element-radius);text-align:center;transition:all 0.3s ease;}
-    .freq-bar.highlight{background:linear-gradient(135deg, var(--yellow), var(--purple));color:#000;font-weight:800;transform:scale(1.05);box-shadow:0 4px 15px rgba(255,213,77,0.4);}
-    .control-group{background:rgba(255,255,255,0.02);padding:16px;border-radius:var(--element-radius);margin:16px 0;}
-    .switch{display:flex;align-items:center;gap:10px;margin:8px 0;}
-    .switch input[type="checkbox"]{width:18px;height:18px;}
-    #miniLog{height:160px;overflow:auto;margin-top:12px;padding:16px;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);font-size:13px;line-height:1.4;}
-    .log-entry{margin-bottom:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);}
-    .log-time{color:var(--accent);font-weight:600;}
-    @media(max-width:980px){.container{grid-template-columns:1fr; padding:16px} #circle{width:140px;height:140px;font-size:50px;}}
+    .freq-bar-container{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px;}
+    .freq-bar{padding:8px;border-radius:var(--element-radius);text-align:center;background:rgba(255,255,255,0.02);font-size:12px;}
+    .freq-bar.highlight{background:linear-gradient(135deg, var(--yellow), var(--purple));color:#000;font-weight:800;}
+    .control-group{background:rgba(255,255,255,0.02);padding:12px;border-radius:var(--element-radius);margin:12px 0;}
+    .switch{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px;}
+    .switch input[type="checkbox"]{width:16px;height:16px;}
+    #miniLog{height:120px;overflow:auto;margin-top:10px;padding:12px;border-radius:var(--element-radius);background:rgba(255,255,255,0.02);font-size:12px;line-height:1.3;}
+    .log-entry{margin-bottom:6px;padding:6px;border-radius:6px;background:rgba(255,255,255,0.02);}
+    .log-time{color:var(--accent);font-weight:600;font-size:11px;}
+
+    /* Mobile responsive */
+    @media (min-width: 768px) {
+      .container{flex-direction:row;padding:15px;}
+      .panel{flex:1;}
+    }
   </style>
 </head>
 <body>
   <div class="banner-wrap">
-    <div class="banner">⚡ NUCH BOT — MATCHES TRADING • Most Frequent Digit Strategy • Contact: 0769769295 ⚡</div>
+    <div class="banner">⚡ NUCH BOT — MATCHES TRADING • Most Frequent Digit Strategy</div>
   </div>
 
   <div class="container">
@@ -84,7 +84,7 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-value" id="totalProfit">$0.00</div>
-          <div class="stat-label">TOTAL PROFIT</div>
+          <div class="stat-label">PROFIT</div>
         </div>
         <div class="stat-card">
           <div class="stat-value" id="tradeCount">0</div>
@@ -105,25 +105,24 @@
 
       <div class="grid2">
         <div>
-          <label>📈 Market Symbol</label>
+          <label>📈 Market</label>
           <input id="market" type="text" value="1HZ100V" />
         </div>
         <div>
-          <label>🔍 Analysis Window</label>
+          <label>🔍 Window Size</label>
           <input id="window" type="number" min="10" max="100" value="30" />
-          <div class="small">Ticks analyzed for frequency</div>
         </div>
       </div>
 
       <label>🎯 Contract Type</label>
       <select id="contractType">
-        <option value="DIGITMATCH" selected>✅ Matches (DIGITMATCH)</option>
-        <option value="DIGITDIFF">❌ Differs (DIGITDIFF)</option>
+        <option value="DIGITMATCH" selected>✅ Matches</option>
+        <option value="DIGITDIFF">❌ Differs</option>
       </select>
 
       <div class="grid2">
         <div>
-          <label>💰 Base Stake ($)</label>
+          <label>💰 Base Stake</label>
           <input id="stake" type="number" min="0.35" step="0.01" value="0.35" />
         </div>
         <div>
@@ -136,56 +135,52 @@
         <label style="margin-top:0;">🛑 Stop Conditions</label>
         <div class="switch">
           <input type="checkbox" id="stopOnProfit" />
-          <label style="margin:0">Take profit at: $</label>
-          <input id="profitLimit" type="number" min="0.01" step="0.01" value="2.00" style="width:80px" />
+          <label style="margin:0">Profit at: $</label>
+          <input id="profitLimit" type="number" min="0.01" step="0.01" value="2.00" style="width:70px;padding:8px;" />
         </div>
         <div class="switch">
           <input type="checkbox" id="stopOnLoss" />
-          <label style="margin:0">Stop loss at: -$</label>
-          <input id="lossLimit" type="number" min="0.01" step="0.01" value="5.00" style="width:80px" />
-        </div>
-        <div class="switch">
-          <input type="checkbox" id="stopOnSingleLoss" />
-          <label style="margin:0">Stop after single loss</label>
+          <label style="margin:0">Loss at: -$</label>
+          <input id="lossLimit" type="number" min="0.01" step="0.01" value="5.00" style="width:70px;padding:8px;" />
         </div>
       </div>
 
       <div class="switch">
         <input type="checkbox" id="voiceAlert" />
-        <label style="margin:0">🔊 Voice alerts on win/loss</label>
+        <label style="margin:0">🔊 Voice alerts</label>
       </div>
 
-      <div style="display:flex;gap:12px;margin-top:20px;">
-        <button class="btn btn-start" id="startBtn">🚀 START BOT</button>
-        <button class="btn btn-stop" id="stopBtn">🛑 STOP BOT</button>
+      <div style="display:flex;gap:10px;margin-top:15px;">
+        <button class="btn btn-start" id="startBtn">🚀 START</button>
+        <button class="btn btn-stop" id="stopBtn">🛑 STOP</button>
       </div>
 
-      <label style="margin-top:20px;">📝 Activity Log</label>
+      <label style="margin-top:15px;">📝 Activity Log</label>
       <div id="miniLog"></div>
     </div>
 
     <!-- Right Panel - Live Data -->
     <div class="panel">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-        <div style="font-weight:800;font-size:18px;">📊 LIVE TRADING VIEW</div>
-        <div style="font-size:14px;color:var(--muted)">Symbol: <span id="liveSymbol">1HZ100V</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;">
+        <div style="font-weight:800;font-size:16px;">📊 LIVE TRADING</div>
+        <div style="font-size:12px;color:var(--muted)">Symbol: <span id="liveSymbol">1HZ100V</span></div>
       </div>
 
-      <div style="display:flex;gap:24px;align-items:center;margin-bottom:24px;">
-        <div style="flex:0 0 auto;text-align:center">
+      <div style="display:flex;gap:15px;align-items:center;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="text-align:center">
           <div id="circle">
             <div id="circleDigit">-</div>
           </div>
-          <div style="margin-top:12px;font-size:14px;color:var(--muted)">
-            Current Digit: <strong id="currentDigit">—</strong>
+          <div style="margin-top:8px;font-size:12px;color:var(--muted)">
+            Digit: <strong id="currentDigit">—</strong>
           </div>
-          <div style="margin-top:8px;font-size:16px;font-weight:800;color:var(--accent)">
+          <div style="margin-top:4px;font-size:14px;font-weight:800;color:var(--accent)">
             Barrier: <strong id="barrierText">—</strong>
           </div>
         </div>
 
-        <div style="flex:1">
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+        <div style="flex:1;min-width:200px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
             <div class="stat-card">
               <div class="stat-value" id="waitingFlag">No</div>
               <div class="stat-label">WAITING</div>
@@ -197,13 +192,13 @@
           </div>
 
           <div>
-            <div style="font-weight:800;margin-bottom:12px;color:var(--accent)">Digit Frequency Analysis</div>
+            <div style="font-weight:800;margin-bottom:8px;color:var(--accent);font-size:13px;">Digit Frequency</div>
             <div id="freqBars" class="freq-bar-container"></div>
           </div>
         </div>
       </div>
 
-      <div style="font-weight:800;margin-bottom:12px;font-size:16px;">📈 TRADE HISTORY</div>
+      <div style="font-weight:800;margin-bottom:8px;font-size:14px;">📈 TRADE HISTORY</div>
       <div class="log-wrap">
         <table id="logTable">
           <thead>
@@ -211,7 +206,6 @@
               <th>#</th>
               <th>TIME</th>
               <th>BARRIER</th>
-              <th>TYPE</th>
               <th>STAKE</th>
               <th>RESULT</th>
               <th>P/L</th>
@@ -219,13 +213,6 @@
           </thead>
           <tbody></tbody>
         </table>
-      </div>
-
-      <div style="margin-top:16px;padding:12px;background:rgba(0,224,255,0.05);border-radius:var(--element-radius);border-left:4px solid var(--accent);">
-        <div style="font-size:12px;color:var(--muted);line-height:1.5;">
-          <strong>Strategy:</strong> Analyzes last 30 ticks, finds most frequent digit (0-9), places MATCHES contract on that digit. 
-          Martingale: doubles stake after losses, resets after wins.
-        </div>
       </div>
     </div>
   </div>
@@ -270,7 +257,7 @@
       const t = new Date().toLocaleTimeString();
       const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#2cff6e' : '#00d1ff';
       elements.miniLog.innerHTML = `
-        <div class="log-entry" style="border-left: 3px solid ${color}">
+        <div class="log-entry" style="border-left: 2px solid ${color}">
           <span class="log-time">[${t}]</span> ${msg}
         </div>
       ` + elements.miniLog.innerHTML;
@@ -285,7 +272,6 @@
         <td>${state.tradeCount}</td>
         <td class="small">${entry.time}</td>
         <td><strong>${entry.barrier}</strong></td>
-        <td>${entry.prediction}</td>
         <td>$${entry.stake.toFixed(2)}</td>
         <td class="${entry.result === 'WIN' ? 'win' : 'loss'}">${entry.result}</td>
         <td class="${entry.profit >= 0 ? 'win' : 'loss'}">$${entry.profit.toFixed(2)}</td>
@@ -342,8 +328,8 @@
         const el = document.createElement('div');
         el.className = `freq-bar ${i === digit ? 'highlight' : ''}`;
         el.innerHTML = `
-          <div style="font-weight:800; font-size:16px;">${i}</div>
-          <div style="font-size:11px; margin-top:4px;">${freq[i]}</div>
+          <div style="font-weight:800;">${i}</div>
+          <div style="font-size:10px; margin-top:2px;">${freq[i]}</div>
         `;
         elements.freqBars.appendChild(el);
       }
@@ -518,7 +504,7 @@
       // Update barrier display
       elements.barrierText.textContent = digit;
       
-      // Send buy request
+      // Send buy request - FIXED CURRENCY TO USD
       ws.send(JSON.stringify({
         buy: 1,
         price: state.currentStake,
@@ -526,7 +512,7 @@
           amount: state.currentStake,
           basis: 'stake',
           contract_type: contractType,
-          currency: 'USD',
+          currency: 'USD', // ← FIXED TO USD
           duration: 1,
           duration_unit: 't',
           symbol: state.market,
@@ -588,7 +574,6 @@
       const profitLimit = parseFloat(document.getElementById('profitLimit').value) || 0;
       const stopOnLoss = document.getElementById('stopOnLoss').checked;
       const lossLimit = parseFloat(document.getElementById('lossLimit').value) || 0;
-      const stopOnSingleLoss = document.getElementById('stopOnSingleLoss').checked;
       
       if (stopOnProfit && state.totalProfit >= profitLimit) {
         addMini(`🎉 Profit target reached: $${state.totalProfit.toFixed(2)} - Stopping bot`, 'success');
@@ -598,12 +583,6 @@
       
       if (stopOnLoss && state.totalProfit <= -lossLimit) {
         addMini(`💸 Loss limit reached: $${Math.abs(state.totalProfit).toFixed(2)} - Stopping bot`, 'error');
-        stopBot();
-        return;
-      }
-      
-      if (stopOnSingleLoss && state.lossStreak >= 1) {
-        addMini('🛑 Single loss stop triggered', 'error');
         stopBot();
         return;
       }
