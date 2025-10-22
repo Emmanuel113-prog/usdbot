@@ -200,40 +200,330 @@
     const windowSizeEl = document.getElementById('windowSize');
     const logTableBody = document.querySelector('#logTable tbody');
 
-    function addMini(msg){ const t=new Date().toLocaleTimeString(); miniLog.innerHTML=`<div style="margin-bottom:6px"><strong>[${t}]</strong> ${msg}</div>` + miniLog.innerHTML;}
-    function addLogRow(entry){ state.tradeCount+=1; const tr=document.createElement('tr'); tr.innerHTML=`<td>${state.tradeCount}</td><td class="small">${entry.time}</td><td>${entry.barrier}</td><td>${entry.prediction}</td><td>$${entry.stake.toFixed(2)}</td><td>${entry.result}</td><td>$${entry.profit.toFixed(2)}</td>`; logTableBody.prepend(tr);}
-    function updateUI(){ totalProfitEl.textContent=`$${state.totalProfit.toFixed(2)}`; sessionInfoEl.textContent=`Trades: ${state.tradeCount} • Loss Streak: ${state.lossStreak}`; tradeCountEl.textContent=`${state.tradeCount}`; lossStreakEl.textContent=`${state.lossStreak}`; waitingFlagEl.textContent=state.waitingResult?'Yes':'No'; document.getElementById('currentStake').value=`$${state.currentStake.toFixed(2)}`; document.getElementById('liveSymbol').textContent=state.market; windowSizeEl.textContent=state.window;}
-    function speak(text){if(!('speechSynthesis' in window))return; const utter=new SpeechSynthesisUtterance(text); utter.lang='en-US'; window.speechSynthesis.speak(utter);}
-
-    function computeFrequencies(){ const freq=new Array(10).fill(0); state.ticks.forEach(d=>{ if(typeof d==='number') freq[d]++; }); return freq;}
-    function mostFrequentDigit(){ const freq=computeFrequencies(); let best=0,bestDigit=null; for(let i=0;i<freq.length;i++){ if(freq[i]>best){ best=freq[i]; bestDigit=i; } } return {digit:bestDigit,freq}; }
-    function renderFreqBars(){ const {digit,freq}=mostFrequentDigit(); freqBars.innerHTML=''; const maxVal=Math.max(...freq,1); for(let i=0;i<10;i++){ const pct=Math.round((freq[i]/maxVal)*100); const el=document.createElement('div'); el.style.padding='6px'; el.style.borderRadius='8px'; el.style.background=i===digit?'linear-gradient(90deg,#ffd54d,#ff6b6b)':'rgba(255,255,255,0.02)'; el.innerHTML=`<div style="font-weight:800">${i}</div><div style="font-size:11px;color:var(--muted)">${freq[i]}</div>`; freqBars.appendChild(el);}}
-
-    function startBot(){
-      state.token=document.getElementById('token').value.trim();
-      state.market=(document.getElementById('market').value||'1HZ100V').trim();
-      state.window=parseInt(document.getElementById('window').value)||30;
-      state.baseStake=parseFloat(document.getElementById('stake').value)||0.35;
-      state.currentStake=state.baseStake;
-      state.ticks=[]; state.isRunning=true; state.tradeCount=0; state.lossStreak=0; state.totalProfit=0; state.waitingResult=false; state.lastBarrier=null;
-      logTableBody.innerHTML='';
-      if(!state.token){alert('Enter valid API token'); return;}
-      addMini('Starting Matches/Differs bot...');
-      connectWebsocket(); updateUI();
+    function addMini(msg){ 
+      const t = new Date().toLocaleTimeString(); 
+      miniLog.innerHTML = `<div style="margin-bottom:6px"><strong>[${t}]</strong> ${msg}</div>` + miniLog.innerHTML;
     }
 
-    function stopBot(){ state.isRunning=false; if(ws){try{ws.close();}catch(e){} } addMini('Bot stopped.'); updateUI(); }
+    function addLogRow(entry){ 
+      state.tradeCount += 1; 
+      const tr = document.createElement('tr'); 
+      tr.innerHTML = `<td>${state.tradeCount}</td><td class="small">${entry.time}</td><td>${entry.barrier}</td><td>${entry.prediction}</td><td>$${entry.stake.toFixed(2)}</td><td>${entry.result}</td><td>$${entry.profit.toFixed(2)}</td>`; 
+      logTableBody.prepend(tr);
+    }
+
+    function updateUI(){ 
+      totalProfitEl.textContent = `$${state.totalProfit.toFixed(2)}`; 
+      sessionInfoEl.textContent = `Trades: ${state.tradeCount} • Loss Streak: ${state.lossStreak}`; 
+      tradeCountEl.textContent = `${state.tradeCount}`; 
+      lossStreakEl.textContent = `${state.lossStreak}`; 
+      waitingFlagEl.textContent = state.waitingResult ? 'Yes' : 'No'; 
+      document.getElementById('currentStake').value = `$${state.currentStake.toFixed(2)}`; 
+      document.getElementById('liveSymbol').textContent = state.market; 
+      windowSizeEl.textContent = state.window;
+    }
+
+    function speak(text){
+      if(!('speechSynthesis' in window)) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      window.speechSynthesis.speak(utter);
+    }
+
+    function computeFrequencies(){ 
+      const freq = new Array(10).fill(0); 
+      state.ticks.forEach(d => { 
+        if(typeof d === 'number') freq[d]++; 
+      }); 
+      return freq;
+    }
+
+    function mostFrequentDigit(){ 
+      const freq = computeFrequencies(); 
+      let best = 0, bestDigit = null; 
+      for(let i = 0; i < freq.length; i++){ 
+        if(freq[i] > best){ 
+          best = freq[i]; 
+          bestDigit = i; 
+        } 
+      } 
+      return {digit: bestDigit, freq};
+    }
+
+    function renderFreqBars(){ 
+      const {digit, freq} = mostFrequentDigit(); 
+      freqBars.innerHTML = ''; 
+      const maxVal = Math.max(...freq, 1); 
+      for(let i = 0; i < 10; i++){ 
+        const pct = Math.round((freq[i] / maxVal) * 100); 
+        const el = document.createElement('div'); 
+        el.style.padding = '6px'; 
+        el.style.borderRadius = '8px'; 
+        el.style.background = i === digit ? 'linear-gradient(90deg,#ffd54d,#ff6b6b)' : 'rgba(255,255,255,0.02)'; 
+        el.innerHTML = `<div style="font-weight:800">${i}</div><div style="font-size:11px;color:var(--muted)">${freq[i]}</div>`; 
+        freqBars.appendChild(el); 
+      }
+    }
+
+    function startBot(){
+      state.token = document.getElementById('token').value.trim();
+      state.market = (document.getElementById('market').value || '1HZ100V').trim();
+      state.window = parseInt(document.getElementById('window').value) || 30;
+      state.baseStake = parseFloat(document.getElementById('stake').value) || 0.35;
+      state.currentStake = state.baseStake;
+      state.ticks = []; 
+      state.isRunning = true; 
+      state.tradeCount = 0; 
+      state.lossStreak = 0; 
+      state.totalProfit = 0; 
+      state.waitingResult = false; 
+      state.lastBarrier = null;
+      logTableBody.innerHTML = '';
+      
+      if(!state.token){
+        alert('Enter valid API token'); 
+        return;
+      }
+      
+      addMini('Starting Matches/Differs bot...');
+      connectWebsocket(); 
+      updateUI();
+    }
+
+    function stopBot(){ 
+      state.isRunning = false; 
+      if(ws){
+        try{
+          ws.close();
+        }catch(e){}
+      } 
+      addMini('Bot stopped.'); 
+      updateUI(); 
+    }
 
     function connectWebsocket(){
-      ws=new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');
-      ws.onopen=()=>{ addMini('[WS] Connected'); ws.send(JSON.stringify({authorize:state.token})); };
-      ws.onerror=(e)=>{ addMini('[WS] Error'); console.error(e); };
-      ws.onclose=(ev)=>{ addMini('[WS] Closed'); state.waitingResult=false; updateUI(); if(state.isRunning){ setTimeout(()=>{ addMini('[WS] Reconnecting...'); connectWebsocket(); },3000); } };
-      ws.onmessage=(msg)=>{ try{ const data=JSON.parse(msg.data); if(data.error){ addMini('[ERROR] '+(data.error.message||JSON.stringify(data.error))); if(data.error&&data.error.code==='AuthorizationRequired') stopBot(); return;} handleWsMessage(data);}catch(err){console.error('parse error',err);} };
+      ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');
+      
+      ws.onopen = () => { 
+        addMini('[WS] Connected'); 
+        ws.send(JSON.stringify({authorize: state.token})); 
+      };
+      
+      ws.onerror = (e) => { 
+        addMini('[WS] Error'); 
+        console.error(e); 
+      };
+      
+      ws.onclose = (ev) => { 
+        addMini('[WS] Closed'); 
+        state.waitingResult = false; 
+        updateUI(); 
+        if(state.isRunning){ 
+          setTimeout(() => { 
+            addMini('[WS] Reconnecting...'); 
+            connectWebsocket(); 
+          }, 3000); 
+        } 
+      };
+      
+      ws.onmessage = (msg) => { 
+        try{ 
+          const data = JSON.parse(msg.data); 
+          if(data.error){ 
+            addMini('[ERROR] ' + (data.error.message || JSON.stringify(data.error))); 
+            if(data.error && data.error.code === 'AuthorizationRequired') stopBot(); 
+            return;
+          } 
+          handleWsMessage(data);
+        }catch(err){
+          console.error('parse error', err);
+        } 
+      };
     }
 
     function handleWsMessage(data){
-      if(data.msg_type==='authorize'){ addMini('[BOT] Authorized. Subscribing ticks: '+state.market); ws.send(JSON.stringify({ticks:state.market,subscribe:1})); return; }
-      if(data.msg_type==='tick'){ const quote=data.tick&&data.tick.quote; if(quote===undefined)return; const digit=parseInt(String(quote).slice(-1)); onNewTick(digit); return; }
-      if(data.msg_type==='buy'){ if(data.buy&&data.buy.contract_id){ state.contractId=data.buy.contract_id; addMini(`[TRADE] Bought contract ${state.contractId}`); ws.send(JSON.stringify({proposal_open_contract:1,contract_id:state.contractId,subscribe:1})); } else{ addMini('[ERROR] Buy failed'); state.waitingResult=false; updateUI();} return; }
-      if(data.msg_type==='proposal_open_contract'){ const open=data.proposal_open_contract; if(!open) return; if(open.is_sold){ const profit=parseFloat(open.profit)||0; let entryBarrier=state.lastBarrier; try{ if((!entryBarrier||entryBarrier===null)&&open.entry_tick) entryBarrier=parseInt(String(open.entry_tick).slice(-1)); }catch(e){} handleContractResult(profit,
+      if(data.msg_type === 'authorize'){ 
+        addMini('[BOT] Authorized. Subscribing ticks: ' + state.market); 
+        ws.send(JSON.stringify({ticks: state.market, subscribe: 1})); 
+        return; 
+      }
+      
+      if(data.msg_type === 'tick'){ 
+        const quote = data.tick && data.tick.quote; 
+        if(quote === undefined) return; 
+        const digit = parseInt(String(quote).slice(-1)); 
+        onNewTick(digit); 
+        return; 
+      }
+      
+      if(data.msg_type === 'buy'){ 
+        if(data.buy && data.buy.contract_id){ 
+          state.contractId = data.buy.contract_id; 
+          addMini(`[TRADE] Bought contract ${state.contractId}`); 
+          ws.send(JSON.stringify({
+            proposal_open_contract: 1,
+            contract_id: state.contractId,
+            subscribe: 1
+          })); 
+        } else{ 
+          addMini('[ERROR] Buy failed'); 
+          state.waitingResult = false; 
+          updateUI();
+        } 
+        return; 
+      }
+      
+      if(data.msg_type === 'proposal_open_contract'){ 
+        const open = data.proposal_open_contract; 
+        if(!open) return; 
+        if(open.is_sold){ 
+          const profit = parseFloat(open.profit) || 0; 
+          let entryBarrier = state.lastBarrier; 
+          try{ 
+            if((!entryBarrier || entryBarrier === null) && open.entry_tick) 
+              entryBarrier = parseInt(String(open.entry_tick).slice(-1)); 
+          }catch(e){} 
+          handleContractResult(profit, entryBarrier);
+        }
+        return; 
+      }
+    }
+
+    function onNewTick(digit){
+      if(!state.isRunning) return;
+      
+      // Add new digit to ticks array
+      state.ticks.push(digit);
+      
+      // Keep only the last 'window' ticks
+      if(state.ticks.length > state.window){
+        state.ticks = state.ticks.slice(-state.window);
+      }
+      
+      // Update circle display
+      circleDigitEl.textContent = digit;
+      
+      // Render frequency bars
+      renderFreqBars();
+      
+      // If not waiting for result and have enough data, place trade
+      if(!state.waitingResult && state.ticks.length >= state.window){
+        placeTrade();
+      }
+    }
+
+    function placeTrade(){
+      const {digit} = mostFrequentDigit();
+      if(digit === null) return;
+      
+      state.lastBarrier = digit;
+      state.waitingResult = true;
+      
+      const contractType = document.getElementById('contractType').value;
+      const prediction = contractType === 'DIGITMATCH' ? 'Matches' : 'Differs';
+      
+      addMini(`[TRADE] Placing ${prediction} trade with barrier ${digit}, stake $${state.currentStake.toFixed(2)}`);
+      
+      // Update barrier display
+      barrierText.textContent = digit;
+      
+      // Send buy request
+      ws.send(JSON.stringify({
+        buy: 1,
+        price: state.currentStake,
+        parameters: {
+          amount: state.currentStake,
+          basis: 'stake',
+          contract_type: contractType,
+          currency: 'USD',
+          duration: 1,
+          duration_unit: 't',
+          symbol: state.market,
+          barrier: digit.toString()
+        }
+      }));
+      
+      updateUI();
+    }
+
+    function handleContractResult(profit, barrier){
+      state.waitingResult = false;
+      
+      const contractType = document.getElementById('contractType').value;
+      const prediction = contractType === 'DIGITMATCH' ? 'Matches' : 'Differs';
+      const isWin = profit > 0;
+      const result = isWin ? 'WIN' : 'LOSS';
+      
+      // Update stats
+      state.totalProfit += profit;
+      
+      if(isWin){
+        state.lossStreak = 0;
+        state.currentStake = state.baseStake; // Reset to base stake after win
+      } else {
+        state.lossStreak++;
+        // Martingale: double stake after loss
+        state.currentStake = state.currentStake * 2;
+      }
+      
+      // Add to log
+      const logEntry = {
+        time: new Date().toLocaleTimeString(),
+        barrier: barrier || state.lastBarrier || '?',
+        prediction: prediction,
+        stake: state.currentStake / (isWin ? 1 : 2), // Show original stake
+        result: result,
+        profit: profit
+      };
+      
+      addLogRow(logEntry);
+      
+      // Voice alert
+      const voiceAlert = document.getElementById('voiceAlert').checked;
+      if(voiceAlert){
+        speak(isWin ? 'Trade won' : 'Trade lost');
+      }
+      
+      // Check stop conditions
+      checkStopConditions();
+      
+      addMini(`[RESULT] ${result} - P/L: $${profit.toFixed(2)} - Total: $${state.totalProfit.toFixed(2)}`);
+      updateUI();
+    }
+
+    function checkStopConditions(){
+      const stopOnProfit = document.getElementById('stopOnProfit').checked;
+      const profitLimit = parseFloat(document.getElementById('profitLimit').value) || 0;
+      const stopOnLoss = document.getElementById('stopOnLoss').checked;
+      const lossLimit = parseFloat(document.getElementById('lossLimit').value) || 0;
+      const stopOnSingleLoss = document.getElementById('stopOnSingleLoss').checked;
+      
+      if(stopOnProfit && state.totalProfit >= profitLimit){
+        addMini(`[STOP] Profit target reached: $${state.totalProfit.toFixed(2)}`);
+        stopBot();
+        return;
+      }
+      
+      if(stopOnLoss && state.totalProfit <= -lossLimit){
+        addMini(`[STOP] Loss limit reached: $${state.totalProfit.toFixed(2)}`);
+        stopBot();
+        return;
+      }
+      
+      if(stopOnSingleLoss && state.lossStreak >= 1){
+        addMini('[STOP] Single loss stop triggered');
+        stopBot();
+        return;
+      }
+    }
+
+    // Event listeners
+    document.getElementById('startBtn').addEventListener('click', startBot);
+    document.getElementById('stopBtn').addEventListener('click', stopBot);
+
+    // Initialize UI
+    updateUI();
+    renderFreqBars();
+  </script>
+</body>
+</html>
