@@ -225,7 +225,7 @@
     function stopBot(){ state.isRunning=false; if(ws){try{ws.close();}catch(e){} } addMini('Bot stopped.'); updateUI(); }
 
     function connectWebsocket(){
-      ws=new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+      ws=new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=1089');
       ws.onopen=()=>{ addMini('[WS] Connected'); ws.send(JSON.stringify({authorize:state.token})); };
       ws.onerror=(e)=>{ addMini('[WS] Error'); console.error(e); };
       ws.onclose=(ev)=>{ addMini('[WS] Closed'); state.waitingResult=false; updateUI(); if(state.isRunning){ setTimeout(()=>{ addMini('[WS] Reconnecting...'); connectWebsocket(); },3000); } };
